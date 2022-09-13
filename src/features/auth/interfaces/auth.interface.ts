@@ -1,6 +1,7 @@
 import { Document } from 'mongoose';
 import { ObjectId } from 'mongodb';
 import { Request } from 'express';
+import { IUserDocument } from '@user/interfaces/user.interface';
 
 declare global {
   namespace Express {
@@ -41,5 +42,5 @@ export interface ISignUpData {
 }
 
 export interface IAuthJob {
-  value?: string | IAuthDocument;
+  value?: string | IAuthDocument | IUserDocument;
 }
