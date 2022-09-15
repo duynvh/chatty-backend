@@ -7,13 +7,8 @@ import { BadRequestError } from '@global/helpers/error-handler';
 import { loginSchema } from '@auth/schemes/signin';
 import { IAuthDocument } from '@auth/interfaces/auth.interface';
 import { authService } from '@service/db/auth.service';
-import { IResetPasswordParams, IUserDocument } from '@user/interfaces/user.interface';
+import { IUserDocument } from '@user/interfaces/user.interface';
 import { userService } from '@service/db/user.service';
-import { forgotPasswordTemplate } from '@service/emails/templates/forgot-password/forgot-password-template';
-import { emailQueue } from '@service/queues/email.queue';
-import moment from 'moment';
-import publicIP from 'ip';
-import { resetPasswordTemplate } from '@service/emails/templates/reset-password/reset-password-template';
 
 export class Signin {
   @joiValidation(loginSchema)
@@ -50,20 +45,6 @@ export class Signin {
       uId: existingUser!.uId,
       createdAt: existingUser!.createdAt
     } as IUserDocument;
-
-    // await mailTransport.sendEmail('elisha47@ethereal.email', 'Testing development email', 'This is a test email to show theat development email sender works');
-    const templatePrams: IResetPasswordParams = {
-      username: existingUser.username!,
-      email: existingUser.email!,
-      ipaddress: publicIP.address(),
-      date: moment().format('DD/MM/YYYY'),
-    };
-    const template: string = resetPasswordTemplate.passwordResetConfirmationTemplate(templatePrams);
-    emailQueue.addEmailJob('forgotPasswordEmail', {
-      template,
-      receiverEmail: 'elisha47@ethereal.email',
-      subject: 'Password reset confirmation',
-    });
 
     req.session = { jwt: userJwt };
     res.status(HTTP_STATUS.OK).json({
