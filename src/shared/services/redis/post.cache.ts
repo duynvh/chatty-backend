@@ -205,4 +205,62 @@ export class PostCache extends BaseCache {
       throw new ServerError('Server Error. Try again!');
     }
   }
+
+  public async deletePostFromCache(key: string, currentUserId: string): Promise<void> {
+    try {
+      if (!this.client.isOpen) {
+        await this.client.connect();
+      }
+
+      const postCount: string[] = await this.client.HMGET(`users:${currentUserId}`, 'postsCount');
+      const multi: ReturnType<typeof this.client.multi> = this.client.multi();
+      multi.ZREM('post', `${key}`);
+      multi.DEL(`posts:${key}`);
+      multi.DEL(`comments:${key}`);
+      multi.DEL(`reactions:${key}`);
+      const count: number = parseInt(postCount[0], 10) - 1;
+      multi.HSET(`users:${currentUserId}`, ['postsCount', count]);
+      await multi.exec();
+    } catch (error) {
+      log.error(error);
+      throw new ServerError('Server error. Try again!');
+    }
+  }
+
+  public async updatePostInCache(key: string, updatedPost: IPostDocument): Promise<IPostDocument> {
+    const { post, bgColor, feelings, privacy, gifUrl, imgVersion, imgId, profilePicture } = updatedPost;
+    const firstList: string[] = [
+      'post',
+      `${post}`,
+      'bgColor',
+      `${bgColor}`,
+      'feelings',
+      `${feelings}`,
+      'privacy',
+      `${privacy}`,
+      'gifUrl',
+      `${gifUrl}`
+    ];
+    const secondList: string[] = ['profilePicture', `${profilePicture}`, 'imgVersion', `${imgVersion}`, 'imgId', `${imgId}`];
+    const dataToSave: string[] = [...firstList, ...secondList];
+
+    try {
+      if (!this.client.isOpen) {
+        await this.client.connect();
+      }
+      await this.client.HSET(`posts:${key}`, dataToSave);
+      const multi: ReturnType<typeof this.client.multi> = this.client.multi();
+      multi.HGETALL(`posts:${key}`);
+      const reply: PostCacheMultiType = (await multi.exec()) as PostCacheMultiType;
+      const postReply = reply as IPostDocument[];
+      postReply[0].commentsCount = Helpers.parseJson(`${postReply[0].commentsCount}`) as number;
+      postReply[0].reactions = Helpers.parseJson(`${postReply[0].reactions}`) as IReactions;
+      postReply[0].createdAt = new Date(Helpers.parseJson(`${postReply[0].createdAt}`)) as Date;
+
+      return postReply[0];
+    } catch (error) {
+      log.error(error);
+      throw new ServerError('Server error. Try again.');
+    }
+  }
 }

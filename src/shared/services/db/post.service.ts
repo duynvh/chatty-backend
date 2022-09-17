@@ -2,8 +2,8 @@ import { IPostDocument } from '@post/interfaces/post.interface';
 import { PostModel } from '@post/models/post.schema';
 import { IUserDocument } from '@user/interfaces/user.interface';
 import { UserModel } from '@user/models/user.schema';
-import { UpdateQuery } from 'mongoose';
-import { IGetPostsQuery } from '../../../features/post/interfaces/post.interface';
+import { Query, UpdateQuery } from 'mongoose';
+import { IGetPostsQuery, IQueryComplete, IQueryDeleted } from '../../../features/post/interfaces/post.interface';
 
 class PostService {
   public async addPostToDB(userId: string, createdPost: IPostDocument): Promise<void> {
@@ -33,6 +33,18 @@ class PostService {
   public async postsCount(): Promise<number> {
     const count: number = await PostModel.find({}).countDocuments();
     return count;
+  }
+
+  public async deletePost(postId: string, userId: string): Promise<void> {
+    const deletePost: Query<IQueryComplete & IQueryDeleted, IPostDocument> = PostModel.deleteOne({ _id: postId });
+    // delete reactions here
+    const decrementPostCount: UpdateQuery<IUserDocument> = UserModel.updateOne({ _id: userId }, { $inc: { postsCount: -1 } });
+    await Promise.all([deletePost, decrementPostCount]);
+  }
+
+  public async editPost(postId: string, updatedPost: IPostDocument): Promise<void> {
+    const updatePost: UpdateQuery<IPostDocument> = PostModel.updateOne({ _id: postId }, { $set: updatedPost });
+    await Promise.all([updatePost]);
   }
 }
 

@@ -23,7 +23,7 @@ Accept: application/json
 withCredentials: true
 
 {
-  "post": "This is my third post",
+  "post": "This is my second post",
   "bgColor": "#4aa1f3",
   "privacy": "Private",
   "gifUrl": "",
@@ -38,7 +38,7 @@ Accept: application/json
 withCredentials: true
 
 {
-  "post": "This is my third post",
+  "post": "This is my first post",
   "bgColor": "#4aa1f3",
   "privacy": "Public",
   "gifUrl": "",
@@ -46,3 +46,40 @@ withCredentials: true
   "feelings": "happy",
   "image": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAJYAAACWBAMAAADOL2zRAAAAG1BMVEXMzMyWlpaqqqq3t7fFxcW+vr6xsbGjo6OcnJyLKnDGAAAACXBIWXMAAA7EAAAOxAGVKw4bAAABAElEQVRoge3SMW+DMBiE4YsxJqMJtHOTITPeOsLQnaodGImEUMZEkZhRUqn92f0MaTubtfeMh/QGHANEREREREREREREtIJJ0xbH299kp8l8FaGtLdTQ19HjofxZlJ0m1+eBKZcikd9PWtXC5DoDotRO04B9YOvFIXmXLy2jEbiqE6Df7DTleA5socLqvEFVxtJyrpZFWz/pHM2CVte0lS8g2eDe6prOyqPglhzROL+Xye4tmT4WvRcQ2/m81p+/rdguOi8Hc5L/8Qk4vhZzy08DduGt9eVQyP2qoTM1zi0/uf4hvBWf5c77e69Gf798y08L7j0RERERERERERH9P99ZpSVRivB/rgAAAABJRU5ErkJggg=="
 }
+
+###
+PUT {{baseUrl}}/{{urlPath}}/post/63259c3c61306c0911c16eb1
+Content-Type: application/json
+Accept: application/json
+withCredentials: true,
+
+{
+  "post": "This is my first post",
+  "bgColor": "#4aa1f3",
+  "privacy": "Public",
+  "gifUrl": "",
+  "profilePicture": "https://res.cloudinary.com/dfomh3nyg/image/upload/v1663143343/63218daddd2f7fb49105b2c7",
+  "feelings": "happy",
+}
+
+###
+PUT {{baseUrl}}/{{urlPath}}/post/image/63259d0d61306c0911c16eb5
+Content-Type: application/json
+Accept: application/json
+withCredentials: true,
+
+{
+  "post": "This is my second post",
+  "bgColor": "#4aa1f3",
+  "privacy": "Public",
+  "gifUrl": "",
+  "profilePicture": "https://res.cloudinary.com/dfomh3nyg/image/upload/v1663143343/63218daddd2f7fb49105b2c7",
+  "feelings": "happy",
+  "image": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAJYAAACWBAMAAADOL2zRAAAAG1BMVEXMzMyWlpaqqqq3t7fFxcW+vr6xsbGjo6OcnJyLKnDGAAAACXBIWXMAAA7EAAAOxAGVKw4bAAABAElEQVRoge3SMW+DMBiE4YsxJqMJtHOTITPeOsLQnaodGImEUMZEkZhRUqn92f0MaTubtfeMh/QGHANEREREREREREREtIJJ0xbH299kp8l8FaGtLdTQ19HjofxZlJ0m1+eBKZcikd9PWtXC5DoDotRO04B9YOvFIXmXLy2jEbiqE6Df7DTleA5socLqvEFVxtJyrpZFWz/pHM2CVte0lS8g2eDe6prOyqPglhzROL+Xye4tmT4WvRcQ2/m81p+/rdguOi8Hc5L/8Qk4vhZzy08DduGt9eVQyP2qoTM1zi0/uf4hvBWf5c77e69Gf798y08L7j0RERERERERERH9P99ZpSVRivB/rgAAAABJRU5ErkJggg=="
+}
+
+###
+DELETE {{baseUrl}}/{{urlPath}}/post/63259c3c61306c0911c16eb1
+Content-Type: application/json
+Accept: application/json
+withCredentials: true
