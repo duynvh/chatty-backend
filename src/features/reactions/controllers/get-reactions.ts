@@ -18,13 +18,11 @@ export class Get {
           { postId: new mongoose.Types.ObjectId(postId) },
           { createdAt: -1 }
         );
-    res
-      .status(HTTP_STATUS.OK)
-      .json({
-        message: 'Post reactions',
-        reactions: reactions[0],
-        count: reactions[1],
-      });
+    res.status(HTTP_STATUS.OK).json({
+      message: 'Post reactions',
+      reactions: reactions[0],
+      count: reactions[1],
+    });
   }
 
   public async singleReactionByUsername(

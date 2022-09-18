@@ -85,15 +85,13 @@ describe('Create', () => {
       newPost.image = 'data:text/plain;base64,SGVsbG8sIFdvcmxkIQ==';
       const req: Request = postMockRequest(newPost, authUserPayload) as Request;
       const res: Response = postMockResponse();
-      jest
-        .spyOn(cloudinaryUploads, 'uploads')
-        .mockImplementation((): any =>
-          Promise.resolve({
-            version: '',
-            public_id: '',
-            message: 'Upload error',
-          })
-        );
+      jest.spyOn(cloudinaryUploads, 'uploads').mockImplementation((): any =>
+        Promise.resolve({
+          version: '',
+          public_id: '',
+          message: 'Upload error',
+        })
+      );
 
       Create.prototype.postWithImage(req, res).catch((error: CustomError) => {
         expect(error.statusCode).toEqual(400);
