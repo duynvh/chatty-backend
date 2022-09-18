@@ -22,7 +22,8 @@ export class Signup {
   @joiValidation(signupSchema)
   public async create(req: Request, res: Response): Promise<void> {
     const { username, email, password, avatarColor, avatarImage } = req.body;
-    const checkIfUserExists: IAuthDocument = await authService.getUserByUsernameOrEmail(username, email);
+    const checkIfUserExists: IAuthDocument =
+      await authService.getUserByUsernameOrEmail(username, email);
     if (checkIfUserExists) {
       throw new BadRequestError('Invalid credentials');
     }
@@ -38,18 +39,32 @@ export class Signup {
       password,
       avatarColor,
     });
-    const result: UploadApiResponse = await uploads(avatarImage, `${userObjectId}`, true, true) as UploadApiResponse;
+    const result: UploadApiResponse = (await uploads(
+      avatarImage,
+      `${userObjectId}`,
+      true,
+      true
+    )) as UploadApiResponse;
     if (!result?.public_id) {
       throw new BadRequestError('File upload: Error occurred. Try again');
     }
 
     // Add to redis cache
-    const userDataForCache: IUserDocument = Signup.prototype.userData(authData, userObjectId);
+    const userDataForCache: IUserDocument = Signup.prototype.userData(
+      authData,
+      userObjectId
+    );
     userDataForCache.profilePicture = `https://res.cloudinary.com/dfomh3nyg/image/upload/v${result.version}/${userObjectId}`;
     await userCache.saveUserToCache(`${userObjectId}`, uId, userDataForCache);
 
     // Add to database
-    omit(userDataForCache, ['uId', 'username', 'email', 'avatarColor', 'password']);
+    omit(userDataForCache, [
+      'uId',
+      'username',
+      'email',
+      'avatarColor',
+      'password',
+    ]);
     authQueue.addAuthUserJob('addAuthUserToDB', { value: authData });
     userQueue.addUserJob('addUserToDB', { value: userDataForCache });
 
@@ -58,7 +73,7 @@ export class Signup {
     res.status(HTTP_STATUS.CREATED).json({
       user: userDataForCache,
       token: userJwt,
-      message: 'User created successfully'
+      message: 'User created successfully',
     });
   }
 
@@ -71,7 +86,7 @@ export class Signup {
         username: data.username,
         avatarColor: data.avatarColor,
       },
-      config.JWT_TOKEN!,
+      config.JWT_TOKEN!
     );
   }
 
@@ -114,14 +129,14 @@ export class Signup {
         messages: true,
         reactions: true,
         comments: true,
-        follows: true
+        follows: true,
       },
       social: {
         facebook: '',
         instagram: '',
         twitter: '',
-        youtube: ''
-      }
+        youtube: '',
+      },
     } as unknown as IUserDocument;
   }
 }

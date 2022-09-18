@@ -18,18 +18,31 @@ export class Password {
   @joiValidation(emailSchema)
   public async create(req: Request, res: Response): Promise<void> {
     const { email } = req.body;
-    const existingUser: IAuthDocument = await authService.getAuthUserByEmail(email);
+    const existingUser: IAuthDocument = await authService.getAuthUserByEmail(
+      email
+    );
     if (!existingUser) {
       throw new BadRequestError('Invalid credentials');
     }
 
     const randomBytes: Buffer = await Promise.resolve(crypto.randomBytes(20));
     const randomCharacters: string = randomBytes.toString('hex');
-    await authService.updatePasswordToken(`${existingUser._id!}`, randomCharacters, Date.now() * 60 * 60 * 1000);
+    await authService.updatePasswordToken(
+      `${existingUser._id!}`,
+      randomCharacters,
+      Date.now() * 60 * 60 * 1000
+    );
 
     const resetLink = `${config.CLIENT_URL}/reset-password?token=${randomCharacters}`;
-    const template: string = forgotPasswordTemplate.passwordResetTemplate(existingUser.username!, resetLink);
-    emailQueue.addEmailJob('forgotPasswordEmail', { template, receiverEmail: email, subject: 'Reset your password' });
+    const template: string = forgotPasswordTemplate.passwordResetTemplate(
+      existingUser.username!,
+      resetLink
+    );
+    emailQueue.addEmailJob('forgotPasswordEmail', {
+      template,
+      receiverEmail: email,
+      subject: 'Reset your password',
+    });
     res.status(HTTP_STATUS.OK).json({
       message: 'Password reset email sent',
     });
@@ -43,7 +56,8 @@ export class Password {
       throw new BadRequestError('Password do not match');
     }
 
-    const existingUser: IAuthDocument = await authService.getAuthUserByPasswordToken(token);
+    const existingUser: IAuthDocument =
+      await authService.getAuthUserByPasswordToken(token);
     if (!existingUser) {
       throw new BadRequestError('Reset token has expired');
     }
@@ -60,8 +74,13 @@ export class Password {
       date: moment().format('DD/MM/YYYY HH:mm'),
     };
 
-    const template: string = resetPasswordTemplate.passwordResetConfirmationTemplate(templateParams);
-    emailQueue.addEmailJob('forgotPasswordEmail', { template, receiverEmail: existingUser.email!, subject: 'Password reset confirmation' });
+    const template: string =
+      resetPasswordTemplate.passwordResetConfirmationTemplate(templateParams);
+    emailQueue.addEmailJob('forgotPasswordEmail', {
+      template,
+      receiverEmail: existingUser.email!,
+      subject: 'Password reset confirmation',
+    });
     res.status(HTTP_STATUS.OK).json({
       message: 'Password successfully updated',
     });

@@ -1,6 +1,6 @@
 import Logger from 'bunyan';
 import { config } from '@root/config';
-import { BaseCache } from '@service/redis/base.redis';
+import { BaseCache } from '@service/redis/base.cache';
 
 const log: Logger = config.createLogger('redisConnection');
 

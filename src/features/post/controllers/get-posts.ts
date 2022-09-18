@@ -15,7 +15,11 @@ export class Get {
     const newSkip: number = skip === 0 ? skip : skip + 1;
     let posts: IPostDocument[] = [];
     let totalPosts = 0;
-    const cachedPosts: IPostDocument[] = await postCache.getPostsFromCache('post', newSkip, limit);
+    const cachedPosts: IPostDocument[] = await postCache.getPostsFromCache(
+      'post',
+      newSkip,
+      limit
+    );
     if (cachedPosts.length) {
       posts = cachedPosts;
       totalPosts = await postCache.getTotalPostsInCache();
@@ -37,8 +41,18 @@ export class Get {
     const limit: number = PAGE_SIZE * parseInt(page);
     const newSkip: number = skip === 0 ? skip : skip + 1;
     let posts: IPostDocument[] = [];
-    const cachedPosts: IPostDocument[] = await postCache.getPostsWithImagesFromCache('post', newSkip, limit);
-    posts = cachedPosts.length ? cachedPosts : await postService.getPosts({ imgId: '$ne', gifUrl: '$ne' }, skip, limit, { createdAt: -1 });
-    res.status(HTTP_STATUS.OK).json({ message: 'All posts with images', posts });
+    const cachedPosts: IPostDocument[] =
+      await postCache.getPostsWithImagesFromCache('post', newSkip, limit);
+    posts = cachedPosts.length
+      ? cachedPosts
+      : await postService.getPosts(
+          { imgId: '$ne', gifUrl: '$ne' },
+          skip,
+          limit,
+          { createdAt: -1 }
+        );
+    res
+      .status(HTTP_STATUS.OK)
+      .json({ message: 'All posts with images', posts });
   }
 }

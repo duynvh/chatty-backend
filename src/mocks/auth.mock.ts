@@ -2,7 +2,12 @@
 import { AuthPayload, IAuthDocument } from '@auth/interfaces/auth.interface';
 import { Response } from 'express';
 
-export const authMockRequest = (sessionData: IJWT, body: IAuthMock, currentUser?: AuthPayload | null, params?: any) => ({
+export const authMockRequest = (
+  sessionData: IJWT,
+  body: IAuthMock,
+  currentUser?: AuthPayload | null,
+  params?: any
+) => ({
   session: sessionData,
   body,
   params,
@@ -52,7 +57,7 @@ export const authUserPayload: AuthPayload = {
   username: 'Manny',
   email: 'manny@me.com',
   avatarColor: '#9c27b0',
-  iat: 12345
+  iat: 12345,
 };
 
 export const authMock = {
@@ -62,6 +67,6 @@ export const authMock = {
   email: 'manny@me.com',
   avatarColor: '#9c27b0',
   createdAt: '2022-08-31T07:42:24.451Z',
-  save: () => { },
-  comparePassword: () => false
+  save: () => {},
+  comparePassword: () => false,
 } as unknown as IAuthDocument;

@@ -51,7 +51,7 @@ export class ChattyServer {
       })
     );
     app.use(hpp());
-    // app.use(helmet());
+    app.use(helmet());
     app.use(
       cors({
         origin: config.CLIENT_URL,

@@ -4,7 +4,10 @@ export class Helpers {
 
     return valueString
       .split(' ')
-      .map((value: string) => `${value.charAt(0).toUpperCase()}${value.slice(1).toLowerCase()}`)
+      .map(
+        (value: string) =>
+          `${value.charAt(0).toUpperCase()}${value.slice(1).toLowerCase()}`
+      )
       .join(' ');
   }
 
@@ -29,5 +32,7 @@ export class Helpers {
     } catch (error) {
       return prop;
     }
+
+    return JSON.parse(prop);
   }
 }

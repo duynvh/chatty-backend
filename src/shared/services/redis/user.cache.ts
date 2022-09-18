@@ -1,4 +1,4 @@
-import { BaseCache } from '@service/redis/base.redis';
+import { BaseCache } from '@service/redis/base.cache';
 import { IUserDocument } from '@user/interfaces/user.interface';
 import Logger from 'bunyan';
 import { config } from '@root/config';
@@ -12,7 +12,11 @@ export class UserCache extends BaseCache {
     super('UserCache');
   }
 
-  public async saveUserToCache(key: string, userId: string, createdUser: IUserDocument): Promise<void> {
+  public async saveUserToCache(
+    key: string,
+    userId: string,
+    createdUser: IUserDocument
+  ): Promise<void> {
     const createdAt = new Date();
     const {
       _id,
@@ -33,7 +37,7 @@ export class UserCache extends BaseCache {
       quote,
       bgImageId,
       bgImageVersion,
-      social
+      social,
     } = createdUser;
     const firstList: string[] = [
       '_id',
@@ -49,7 +53,7 @@ export class UserCache extends BaseCache {
       'createdAt',
       `${createdAt}`,
       'postsCount',
-      `${postsCount}`
+      `${postsCount}`,
     ];
     const secondList: string[] = [
       'blocked',
@@ -65,7 +69,7 @@ export class UserCache extends BaseCache {
       'notifications',
       JSON.stringify(notifications),
       'social',
-      JSON.stringify(social)
+      JSON.stringify(social),
     ];
     const thirdList: string[] = [
       'work',
@@ -79,7 +83,7 @@ export class UserCache extends BaseCache {
       'bgImageVersion',
       `${bgImageVersion}`,
       'bgImageId',
-      `${bgImageId}`
+      `${bgImageId}`,
     ];
     const dataToSave: string[] = [...firstList, ...secondList, ...thirdList];
     try {
@@ -87,7 +91,10 @@ export class UserCache extends BaseCache {
         await this.client.connect();
       }
 
-      await this.client.ZADD('user', {score: parseInt(userId, 10), value: `${key}`});
+      await this.client.ZADD('user', {
+        score: parseInt(userId, 10),
+        value: `${key}`,
+      });
       await this.client.HSET(`users:${key}`, dataToSave);
     } catch (error) {
       log.error(error);
@@ -101,7 +108,9 @@ export class UserCache extends BaseCache {
         await this.client.connect();
       }
 
-      const response: IUserDocument = await this.client.HGETALL(`users:${userId}`) as unknown as IUserDocument;
+      const response: IUserDocument = (await this.client.HGETALL(
+        `users:${userId}`
+      )) as unknown as IUserDocument;
       response.createdAt = new Date(Helpers.parseJson(`${response.createdAt}`));
       response.postsCount = Helpers.parseJson(`${response.postsCount}`);
       response.blocked = Helpers.parseJson(`${response.blocked}`);

@@ -16,7 +16,11 @@ const log: Logger = config.createLogger('mailOptions');
 sendGridMail.setApiKey(config.SENDGRID_API_KEY!);
 
 class MailTransport {
-  public async sendEmail(receiverEmail: string, subject: string, body: string): Promise<void> {
+  public async sendEmail(
+    receiverEmail: string,
+    subject: string,
+    body: string
+  ): Promise<void> {
     if (config.NODE_ENV === 'test' || config.NODE_ENV === 'development') {
       this.developmentEmaiLSender(receiverEmail, subject, body);
     } else {
@@ -24,7 +28,11 @@ class MailTransport {
     }
   }
 
-  private async developmentEmaiLSender(receiverEmail: string, subject: string, body: string): Promise<void> {
+  private async developmentEmaiLSender(
+    receiverEmail: string,
+    subject: string,
+    body: string
+  ): Promise<void> {
     // create reusable transporter object using the default SMTP transport
     const transporter: Mail = nodemailer.createTransport({
       host: 'smtp.ethereal.email',
@@ -52,7 +60,11 @@ class MailTransport {
     }
   }
 
-  private async productionEmaiLSender(receiverEmail: string, subject: string, body: string): Promise<void> {
+  private async productionEmaiLSender(
+    receiverEmail: string,
+    subject: string,
+    body: string
+  ): Promise<void> {
     const mailOptions: IMailOptions = {
       from: `Chatty App <${config.SENDER_EMAIL}>`,
       to: receiverEmail,
