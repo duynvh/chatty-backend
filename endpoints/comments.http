@@ -8,9 +8,9 @@ Accept: application/json
 withCredentials: true
 
 {
-  "userTo": "63259c1c61306c0911c16eaa",
-  "postId": "63259d0d61306c0911c16eb5",
-  "comment": "This is my first comment",
+  "userTo": "63283a8fb4765adad51dad59",
+  "postId": "63293954be5413b62fb1b01f",
+  "comment": "This is my third comment",
   "profilePicture": "https://res.cloudinary.com/dfomh3nyg/image/upload/v1663409181/63259c1c61306c0911c16eaa"
 }
 
