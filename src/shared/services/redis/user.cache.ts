@@ -163,6 +163,10 @@ export class UserCache extends BaseCache {
         reply.bgImageId = Helpers.parseJson(`${reply.bgImageId}`);
         reply.bgImageVersion = Helpers.parseJson(`${reply.bgImageVersion}`);
         reply.profilePicture = Helpers.parseJson(`${reply.profilePicture}`);
+        reply.work = Helpers.parseJson(`${reply.work}`);
+        reply.school = Helpers.parseJson(`${reply.school}`);
+        reply.location = Helpers.parseJson(`${reply.location}`);
+        reply.quote = Helpers.parseJson(`${reply.quote}`);
 
         userReplies.push(reply);
       }
@@ -203,6 +207,10 @@ export class UserCache extends BaseCache {
         reply.bgImageId = Helpers.parseJson(`${reply.bgImageId}`);
         reply.bgImageVersion = Helpers.parseJson(`${reply.bgImageVersion}`);
         reply.profilePicture = Helpers.parseJson(`${reply.profilePicture}`);
+        reply.work = Helpers.parseJson(`${reply.work}`);
+        reply.school = Helpers.parseJson(`${reply.school}`);
+        reply.location = Helpers.parseJson(`${reply.location}`);
+        reply.quote = Helpers.parseJson(`${reply.quote}`);
       }
       return replies;
     } catch (error) {

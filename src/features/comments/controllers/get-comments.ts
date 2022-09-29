@@ -41,7 +41,7 @@ export class Get {
 
     res
       .status(HTTP_STATUS.OK)
-      .json({ message: 'Post comments names', comments: commentsNames });
+      .json({ message: 'Post comments names', comments: commentsNames[0] });
   }
 
   public async singleComment(req: Request, res: Response): Promise<void> {
